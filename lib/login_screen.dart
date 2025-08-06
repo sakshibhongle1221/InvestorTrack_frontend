@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter-secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'services/api_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,7 +11,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>{
 
   final ApiService _apiService = ApiService();
-  final _storage = const flutter_secure_storage();
+  final _storage = const FlutterSecureStorage();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -59,7 +59,19 @@ class _LoginScreenState extends State<LoginScreen>{
                   return;
                 }
                 try{
-                  final token
+                  final token = await _apiService.loginUser(email,password);
+                  await _storage.write(key:'token',value:token);
+
+                  if(mounted){
+                    Navigator.pushReplacementNamed(context,'/dashboard');
+                  }
+                }
+                catch(e){
+                  if(mounted){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed To Login:$e')),
+                    );
+                  }
                 }
               },
               child: const Text("Login",
