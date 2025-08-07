@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class ApiService {
+class ApiService   {
   final String _baseUrl = 'http://localhost:3000';
+  final _storage = const FlutterSecureStorage();
 
   Future<Map<String,dynamic>> registerUser(String name,String email,String password) async {
     try{
@@ -29,7 +31,7 @@ class ApiService {
     }
   }
 
-  Future<String> loginUser(String email,String password) async{
+  Future<Map<String,dynamic>> loginUser(String email,String password) async{
     try{
       final response = await http.post(
         Uri.parse('$_baseUrl/login'),
@@ -43,13 +45,109 @@ class ApiService {
       );
       final data = jsonDecode(response.body);
       if(response.statusCode == 200){
-        return data['token'];
-      } else {
+        return {
+        'token': data['token'],
+        'userId': data['userId'],
+      };
+      } 
+      else {
         throw Exception(data['message']??'Failed To Login');
       }
     }
     catch(e){
       throw Exception('Failed To Connect To Server. Error:$e');
     }
-  } 
+  }
+
+
+  Future<List<dynamic>> getTransactions() async{
+    try{
+      final token = await _storage.read(key: 'token');
+
+      final userId = await _storage.read(key: 'userId');
+      if (userId == null) {
+        throw Exception('User ID not found.'); }
+
+      final response =await http.get(
+        Uri.parse('$_baseUrl/api/transactions/$userId'),
+        headers:{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if(response.statusCode == 200){
+        return jsonDecode(response.body);
+      }
+      else{
+        final data = jsonDecode(response.body);
+        throw Exception(data['message']?? 'Failed To Load Transactions.');
+      }
+    }
+    catch(e){
+      throw Exception('Failed To Connect To Server. Error:$e');
+    }
+  }
+
+  Future<Map<String,dynamic>> addTransaction(
+    double amount,String type , String category, String description) async{
+      try{
+        final token = await _storage.read(key: 'token');
+        final userId = await _storage.read(key: 'userId');
+
+        final response = await http.post(
+          Uri.parse('$_baseUrl/api/add-transaction'),
+          headers:{
+            'Content-Type':'application/json; charset=UTF-8',
+            'Authorization':'Bearer $token',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'user_id': userId,
+            'amount':amount,
+            'type':type,
+            'category':category,
+            'description':description,
+          }),
+        );
+
+        if(response.statusCode == 201){
+          return jsonDecode(response.body);
+        }
+        else{
+          final data = jsonDecode(response.body);
+          throw Exception(data['message']??'Failed to add transaction.');
+        }
+      }
+      catch(e){
+        throw Exception('Failed to connect to the server. Error:$e');
+      }
+    }
+
+
+    Future<List<dynamic>> getTransactionSummary() async{
+      try{
+        final token = await _storage.read(key:'token');
+        final userId = await _storage.read(key:'userId');
+        
+        if(userId== null){
+          throw Exception('user ID not found');
+        }
+        final response = await http.get(Uri.parse('$_baseUrl/api/summary/$userId'),
+        headers: {
+          'Content-Type': 'application/json ; charset = UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        );
+        if(response.statusCode==200){
+          return jsonDecode(response.body);
+        }
+        else{
+          final data = jsonDecode(response.body);
+      throw Exception(data['message'] ?? 'Failed to load summary.');
+        }
+      }
+      catch(e){
+        throw Exception('Failed to connect to the server. Error: $e');
+      }
+    }
+
 }

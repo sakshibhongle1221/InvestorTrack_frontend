@@ -59,8 +59,15 @@ class _LoginScreenState extends State<LoginScreen>{
                   return;
                 }
                 try{
-                  final token = await _apiService.loginUser(email,password);
+                  
+                  final responseData = await _apiService.loginUser(email, password);
+   
+                  final String token = responseData['token'];
+                  final String userId = responseData['userId'].toString(); 
+
                   await _storage.write(key:'token',value:token);
+                  await _storage.write(key: 'userId', value: userId);
+
 
                   if(mounted){
                     Navigator.pushReplacementNamed(context,'/dashboard');
