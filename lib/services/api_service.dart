@@ -6,7 +6,7 @@ class ApiService   {
   final String _baseUrl = 'http://localhost:3000';
   final _storage = const FlutterSecureStorage();
 
-  Future<Map<String,dynamic>> registerUser(String name,String email,String password) async {
+  Future<Map<String,dynamic>> registerUser(String email,String password) async {
     try{
       final response = await http.post(
         Uri.parse('$_baseUrl/signup'),
@@ -14,7 +14,7 @@ class ApiService   {
           'Content-Type':'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String,String>{
-          'name': name,
+          //'name': name,
           'email':email,
           'password':password,
         }),
@@ -149,5 +149,164 @@ class ApiService   {
         throw Exception('Failed to connect to the server. Error: $e');
       }
     }
+
+
+Future<List<dynamic>> getBudgets() async{
+  try{
+    final token = await _storage.read(key: 'token');
+    final userId = await _storage.read(key:'userId');
+    if(userId== null) throw Exception('user ID not found.');
+
+    final response = await http.get(
+      Uri.parse('$_baseUrl/api/budgets/$userId'),
+      headers: { 'Authorization': 'Bearer $token'},
+    );
+    if(response.statusCode == 200){
+      return jsonDecode(response.body);
+    }
+    else{
+      throw Exception('Failed to load budgets.');
+    }
+  }
+  catch(e){
+    throw Exception('API call failed : $e');
+  }
+}
+
+Future<Map<String,dynamic>> addBudget(String category, double amount, String month) async{
+  try{
+    final token = await _storage.read(key: 'token');
+    final userId = await _storage.read(key:'userId');
+
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/budgets'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':'Bearer $token',
+      },
+      body: jsonEncode(<String,dynamic>{
+        'user_id': userId,
+        'category':category,
+        'amount': amount,
+        'month': month,
+      }),
+    );
+
+    if(response.statusCode == 201){
+      return jsonDecode(response.body);
+    }
+    else{
+      throw Exception('Failed to add budget');
+    }
+  }
+  catch(e){
+    throw Exception('API call failed: $e');
+  }
+}
+
+
+Future<List<dynamic>> getGoals()  async{
+  try{
+    final token = await _storage.read(key:'token');
+    final userId = await _storage.read(key:'userId');
+    if(userId == null) throw Exception('User ID not found.');
+
+    final response = await http.get(
+      Uri.parse('$_baseUrl/api/goals/$userId'),
+      headers:{'Authorization':'Bearer $token'},
+    );
+
+    if(response.statusCode == 200){
+      return jsonDecode(response.body);
+    }
+    else{
+      throw Exception('Failed to load goals');
+    }
+  }
+  catch(e){
+    throw Exception('API call failed: $e');
+  }
+}
+
+Future<Map<String,dynamic>> addGoal(String title, double targetAmount, String targetDate ) async{
+  try{
+    final token = await _storage.read(key:'token');
+    final userId = await _storage.read(key:'userId');
+
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/goals'),
+      headers: {
+        'Content-Type': 'application/json; chatset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(<String,dynamic>{
+        'user_id':userId,
+        'title':title,
+        'target_amount': targetAmount,
+        'target_date': targetDate,
+      }),      
+    );
+
+    if(response.statusCode == 201){
+      return jsonDecode(response.body);
+    }
+    else{
+      print('Failed to add goal. Server response: ${response.body}');
+      throw Exception('Failed to add goal');
+    }
+  }
+  catch(e){
+    throw Exception('API call failed: $e');
+  }
+}
+
+
+Future<Map<String,dynamic>> getDashboardStats() async{
+  try{
+    final token = await _storage.read(key:'token');
+    final userId = await _storage.read(key:'userId');
+    if(userId == null) throw Exception('User ID not found.');
+
+    final response = await http.get(Uri.parse('$_baseUrl/api/stats/$userId'),
+    headers: {'Authorization':'Bearer $token'},
+    );
+
+    if(response.statusCode == 200){
+      return jsonDecode(response.body);
+    }
+    else{
+      throw Exception('Failed to load dashboard stats.');
+    }
+  }
+  catch(e){
+    throw Exception('Failed to load dashboard stats.');
+  }
+}
+
+
+Future<List<dynamic>> getInvestmentPerformance() async{
+  try{
+    final token= await _storage.read(key: 'token');
+    final userId = await _storage.read(key: 'userId');
+    if(userId == null) throw Exception('User ID not found.');
+
+    final response = await http.get(Uri.parse('$_baseUrl/api/investments/performance/$userId'),
+    headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if(response.statusCode == 200){
+      return jsonDecode(response.body);
+    }
+    else{
+      throw Exception('Failed to load investment data');
+    }
+  }
+  catch(e){
+    throw Exception('API call failed: $e');
+  }
+}
+
+
+
 
 }

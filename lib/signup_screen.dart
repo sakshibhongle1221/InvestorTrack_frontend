@@ -10,14 +10,14 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final ApiService _apiService = ApiService();
-  final TextEditingController nameController = TextEditingController();
+  //final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
-    nameController.dispose();
+    //nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
@@ -35,11 +35,11 @@ class _SignupScreenState extends State<SignupScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: 'Full Name'),
-            ),
-            const SizedBox(height: 16),
+            //TextField(
+            //  controller: nameController,
+            //  decoration: const InputDecoration(labelText: 'Full Name'),
+           // ),
+          //  const SizedBox(height: 16),
             TextField(
               controller: emailController,
               decoration: const InputDecoration(labelText: 'Email'),
@@ -59,12 +59,12 @@ class _SignupScreenState extends State<SignupScreen> {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () async {
-                final String name = nameController.text.trim();
+              //  final String name = nameController.text.trim();
                 final String email = emailController.text.trim();
                 final String password = passwordController.text;
                 final String confirmPassword = confirmPasswordController.text;
 
-                if(name.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty){
+                if( email.isEmpty || password.isEmpty || confirmPassword.isEmpty){
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content:Text("Please Fill All The Fields")),
                   );
@@ -86,7 +86,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 }
 
                 try{
-                  final response = await _apiService.registerUser(name,email,password);
+                  final response = await _apiService.registerUser(email,password);
 
                   if(mounted){
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -103,7 +103,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   }
                 }
                 print('Register Clicked');
-                print('Name: $name');
+                //print('Name: $name');
                 print('Email: $email');
                 print('Password: $password');
                 print('Confirm Password: $confirmPassword');

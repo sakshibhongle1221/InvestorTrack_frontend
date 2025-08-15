@@ -5,7 +5,7 @@ import 'services/api_service.dart';
 class DashboardScreen extends StatefulWidget{
   const DashboardScreen({super.key});
 
-  @override
+  @override 
   State<DashboardScreen> createState()=> _DashboardScreenState();
 }
 
@@ -14,6 +14,9 @@ class _DashboardScreenState extends State<DashboardScreen>{
   bool _isLoading = true;
   List<dynamic> _transactions = [];
   List<dynamic> _summaryData = [];
+  Map<String, dynamic> _dashboardStats = {};
+  List<dynamic> _investmentData = [];
+  
 
   @override
   void initState(){
@@ -29,10 +32,14 @@ class _DashboardScreenState extends State<DashboardScreen>{
       final results = await Future.wait([ 
       _apiService.getTransactions(),
       _apiService.getTransactionSummary(),
+      _apiService.getDashboardStats(),
+      _apiService.getInvestmentPerformance(),
       ]);
       setState((){
-       _transactions= results[0];
-        _summaryData = results[1];
+       _transactions = results[0] as List<dynamic>;
+       _summaryData = results[1] as List<dynamic>;
+       _dashboardStats = results[2] as Map<String, dynamic>;
+       _investmentData = results[3] as List<dynamic>;
        _isLoading =false;        
       });
     }
@@ -48,95 +55,83 @@ class _DashboardScreenState extends State<DashboardScreen>{
     }
   }
 
-  Future<void> _showAddTransactionDialog() async {
-    final descriptionController = TextEditingController();
-    final amountController = TextEditingController();
-    String transactionType = 'expense';
-    //String category = 'other';
-    String category = 'food';
-
-    return showDialog<void>(
-      context: context,
-      builder:(BuildContext context){
-        return AlertDialog(
-          title: const Text('Add New Transaction'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextField(
-                  controller: descriptionController,
-                  decoration: const InputDecoration(hintText:"Description"),
-                ),
-                TextField(
-                  controller: amountController,
-                  decoration: const InputDecoration(hintText:"Amount"),
-                  keyboardType: TextInputType.number,
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-            child: const Text('cancel'),
-            onPressed:(){
-              Navigator.of(context).pop(); 
-            },  
-            ),
-            TextButton(
-              child: const Text('Save'),
-              onPressed:() async{
-                try{
-                  await _apiService.addTransaction(double.parse(amountController.text),
-                  transactionType,
-                  category,descriptionController.text
-                  );
-                  if (mounted) {
-                    Navigator.of(context).pop();
-                    _fetchData();
-                  }
-                }
-                catch (e) {
-                  if (mounted) {
-                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to add transaction: $e')),
-                    );
-                  }
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 @override
 Widget build(BuildContext context) {
+  final textTheme = Theme.of(context).textTheme;
   return Scaffold(
-    appBar: AppBar(
-      title: const Text('My Dashboard'),
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.account_balance_wallet),
-          tooltip: 'Budgets',
-          onPressed: () {
-            Navigator.pushNamed(context, '/budgets');
-          },
-        ),
-      ],
-    ),
+   // appBar: AppBar(
+   //   title: const Text('My Dashboard'),
+   //   centerTitle: true,
+   //   automaticallyImplyLeading: false,
+   //   actions: [
+   //     IconButton(
+   //       icon: const Icon(Icons.        account_balance_wallet),
+   //       tooltip: 'Budgets',
+   //       onPressed: () {
+   //         Navigator.pushNamed(context, '/budgets');
+   //       },
+   //     ),
+   //     IconButton(
+   //       icon: const Icon(Icons.flag),
+   //       tooltip: 'Goals',
+   //       onPressed:(){
+   //         Navigator.pushNamed(context,'/goals');
+   //       },
+   //     ),
+   //   ],
+   //  ),
     body: _isLoading
         ? const Center(child: CircularProgressIndicator())
-        : ListView( // Use ListView to allow scrolling
+        : ListView( // ListView allow scrolling
             padding: const EdgeInsets.all(16.0),
             children: [
               // --- SUMMARY CARDS (Placeholder) ---
               Row(
                 children: [
-                  Expanded(child: Card(child: ListTile(title: Text('Net Worth'), subtitle: Text('\$12,345')))),
-                  Expanded(child: Card(child: ListTile(title: Text('Income'), subtitle: Text('\$5,678')))),
-                  Expanded(child: Card(child: ListTile(title: Text('Expenses'), subtitle: Text('\$2,345')))),
+                  Expanded(
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Net Worth', style: textTheme.bodyMedium),
+                            Text('₹${_dashboardStats['netWorth'] ?? 0}', style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Expanded(
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Income', style: textTheme.bodyMedium),
+                            Text('₹${_dashboardStats['totalIncome'] ?? 0}', style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  
+                  Expanded(
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Expenses', style: textTheme.bodyMedium),
+                            Text('₹${_dashboardStats['totalExpenses'] ?? 0}', style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -179,39 +174,74 @@ Widget build(BuildContext context) {
               const SizedBox(height: 16),
 
               // --- RECENT TRANSACTIONS CARD ---
+             // Card(
+             //   elevation: 2.0,
+             //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+             //   child: Padding(
+             //     padding: const EdgeInsets.all(16.0),
+             //     child: Column(
+             //       crossAxisAlignment: CrossAxisAlignment.start,
+             //       children: [
+             //         const Text('Recent Transactions', style: TextStyle(fontSize: 18, //fontWeight: FontWeight.bold)),
+             //         // We use ...map here because it's already inside a scrolling ListView
+             //         ..._transactions.take(5).map((transaction) {
+             //             return ListTile(
+             //               title: Text(transaction['description'] ?? 'No description'),
+             //               subtitle: Text(transaction['category'] ?? 'Uncategorized'),
+             //               trailing: Text(
+             //                 '₹${transaction['amount']}',
+             //                 style: TextStyle(
+             //                   color: transaction['type'] == 'income' ? Colors.green : Colors.//red,
+             //                 ),
+             //               ),
+             //             );
+             //         }).toList(),
+             //       ],
+             //     ),
+             //   ),
+             // ),
+
               Card(
-                elevation: 2.0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Recent Transactions', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      // We use ...map here because it's already inside a scrolling ListView
-                      ..._transactions.take(5).map((transaction) {
-                          return ListTile(
-                            title: Text(transaction['description'] ?? 'No description'),
-                            subtitle: Text(transaction['category'] ?? 'Uncategorized'),
-                            trailing: Text(
-                              '₹${transaction['amount']}',
-                              style: TextStyle(
-                                color: transaction['type'] == 'income' ? Colors.green : Colors.red,
+                      const Text('Investment Performance', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 200,
+                        child: LineChart(
+                          LineChartData(
+                            gridData: FlGridData(show: false),
+                            titlesData: FlTitlesData(show: false),
+                            borderData: FlBorderData(show: false),
+                            lineBarsData:[
+                            LineChartBarData(
+                              spots: _investmentData.asMap().entries.map((entry){
+                                return FlSpot(entry.key.toDouble(),entry.value['value'].toDouble());
+                              }).toList(),
+                              isCurved: true,
+                              color: Colors.green,
+                              barWidth: 4,
+                              isStrokeCapRound: true,
+                              dotData: FlDotData(show: false),
+                              belowBarData: BarAreaData(
+                                show:true,
+                                color: Colors.green.withOpacity(0.3),
                               ),
                             ),
-                          );
-                      }).toList(),
+                           ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
-            ],
-          ),
-    floatingActionButton: FloatingActionButton(
-      onPressed: _showAddTransactionDialog,
-      tooltip: 'Add Transaction',
-      child: const Icon(Icons.add),
+       ],
     ),
+    
   );
 }
 
