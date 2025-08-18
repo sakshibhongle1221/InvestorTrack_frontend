@@ -14,7 +14,7 @@ class _DashboardScreenState extends State<DashboardScreen>{
   bool _isLoading = true;
   List<dynamic> _transactions = [];
   List<dynamic> _summaryData = [];
-  Map<String, dynamic> _dashboardStats = {};
+  Map<String,dynamic> _dashboardStats = {};
   List<dynamic> _investmentData = [];
   
 
@@ -96,7 +96,8 @@ Widget build(BuildContext context) {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Net Worth', style: textTheme.bodyMedium),
-                            Text('₹${_dashboardStats['netWorth'] ?? 0}', style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                            Text('₹${_dashboardStats['netWorth'] ?? 0}', style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold,
+                            fontSize:22,)),
                           ],
                         ),
                       ),
@@ -111,7 +112,8 @@ Widget build(BuildContext context) {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Income', style: textTheme.bodyMedium),
-                            Text('₹${_dashboardStats['totalIncome'] ?? 0}', style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                            Text('₹${_dashboardStats['totalIncome'] ?? 0}', style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold,
+                            fontSize:22,)),
                           ],
                         ),
                       ),
@@ -126,7 +128,8 @@ Widget build(BuildContext context) {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Expenses', style: textTheme.bodyMedium),
-                            Text('₹${_dashboardStats['totalExpenses'] ?? 0}', style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                            Text('₹${_dashboardStats['totalExpenses'] ?? 0}', style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold,
+                            fontSize:22)),
                           ],
                         ),
                       ),
@@ -141,11 +144,11 @@ Widget build(BuildContext context) {
                 elevation: 2.0,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(30.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Expense Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text('Expense Summary', style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold)),
                       SizedBox(
                         height: 200,
                         child: PieChart(
@@ -207,7 +210,7 @@ Widget build(BuildContext context) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Investment Performance', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text('Investment Performance', style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 20),
                       SizedBox(
                         height: 200,
@@ -225,7 +228,7 @@ Widget build(BuildContext context) {
                               color: Colors.green,
                               barWidth: 4,
                               isStrokeCapRound: true,
-                              dotData: FlDotData(show: false),
+                              dotData: FlDotData(show: true),
                               belowBarData: BarAreaData(
                                 show:true,
                                 color: Colors.green.withOpacity(0.3),

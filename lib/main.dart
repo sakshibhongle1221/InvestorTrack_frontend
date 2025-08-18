@@ -5,6 +5,7 @@ import 'signup_screen.dart';
 import 'dashboard_screen.dart';
 import 'budgets_screen.dart';
 import 'goals_screen.dart';
+import 'theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,29 +18,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'InvestorTrack',
-      theme: 
-      ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF4CAF50), 
-       brightness: Brightness.light,),
-        useMaterial3: true,
-        // Set the background color for the whole app
-        scaffoldBackgroundColor: const Color(0xFFF6FBF6), // A very light gray ab mne made it light green
-
-       // Define default text styles
-      textTheme: const TextTheme(
-      headlineSmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
-      bodyLarge: TextStyle(fontSize: 16.0),
-      bodyMedium: TextStyle(fontSize: 14.0, color: Colors.black),
-      ),
-
-     // Define Card theme
-     cardTheme: CardThemeData(
-    elevation: 2.0,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-    margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-  ),
-  ),
+      theme: appTheme, 
+    //  ThemeData(
+    //    colorScheme: ColorScheme.fromSeed(
+    //    seedColor: const Color(0xFF4CAF50), 
+    //   brightness: Brightness.light,),
+    //    useMaterial3: true,
+    //    // Set the background color for the whole app
+    //    scaffoldBackgroundColor: const Color//(0xFFF6FBF6), // A very light gray ab mne //made it light green
+//
+    //   // Define default text styles
+    //  textTheme: const TextTheme(
+    //  headlineSmall: TextStyle(fontWeight: //FontWeight.bold, fontSize: 30.0),
+    //  bodyLarge: TextStyle(fontSize: 16.0),
+    //  bodyMedium: TextStyle(fontSize: 14.0, //color: Colors.black),
+    //  ),
+//
+    // // Define Card theme
+    // cardTheme: CardThemeData(
+   // elevation: 2.0,
+   // shape: RoundedRectangleBorder(borderRadius: //BorderRadius.circular(12.0)),
+   // margin: const EdgeInsets.symmetric(vertical: //8.0, horizontal: 4.0),
+   // ),
+   // ),
       debugShowCheckedModeBanner : false,
       //home: const SignupScreen(),
       home: const LoginScreen(),
