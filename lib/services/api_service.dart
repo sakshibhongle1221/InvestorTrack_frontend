@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiService   {
-  final String _baseUrl = 'http://localhost:3000';
+  final String _baseUrl = 'https://investortrack.onrender.com';
   final _storage = const FlutterSecureStorage();
 
   Future<Map<String,dynamic>> registerUser(String email,String password) async {
