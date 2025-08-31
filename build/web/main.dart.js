@@ -85529,7 +85529,7 @@ A6(a,b){return this.anb(a,b)},
 anb(a,b){var s=0,r=A.S(t.P),q,p=2,o=[],n,m,l,k,j,i,h
 var $async$A6=A.O(function(c,d){if(c===1){o.push(d)
 s=p}while(true)switch(s){case 0:p=4
-l=A.dx("https://investortrack.onrender.com/signup")
+l=A.dx("https://investortrack-backend.onrender.com/signup")
 k=t.N
 j=A.am(["Content-Type","application/json; charset=UTF-8"],k,k)
 s=7
@@ -85559,7 +85559,7 @@ zp(a,b){return this.alm(a,b)},
 alm(a,b){var s=0,r=A.S(t.P),q,p=2,o=[],n,m,l,k,j,i,h,g
 var $async$zp=A.O(function(c,d){if(c===1){o.push(d)
 s=p}while(true)switch(s){case 0:p=4
-k=A.dx("https://investortrack.onrender.com/login")
+k=A.dx("https://investortrack-backend.onrender.com/login")
 j=t.N
 i=A.am(["Content-Type","application/json;charset=UTF-8"],j,j)
 s=7
@@ -85599,7 +85599,7 @@ case 8:m=b
 if(m==null){i=A.bt("User ID not found.")
 throw A.e(i)}i=t.N
 s=9
-return A.M(A.Hh(A.dx("https://investortrack.onrender.com/api/transactions/"+m),A.am(["Content-Type","application/json; charset=UTF-8","Authorization","Bearer "+A.n(n)],i,i)),$async$mD)
+return A.M(A.Hh(A.dx("https://investortrack-backend.onrender.com/api/transactions/"+m),A.am(["Content-Type","application/json; charset=UTF-8","Authorization","Bearer "+A.n(n)],i,i)),$async$mD)
 case 9:l=b
 if(l.b===200){i=l
 i=B.ab.fR(0,A.h6(A.h4(i.e)).cG(0,i.w),null)
@@ -85634,7 +85634,7 @@ case 7:n=a1
 s=8
 return A.M(B.ar.eW(0,"userId"),$async$pl)
 case 8:m=a1
-i=A.dx("https://investortrack.onrender.com/api/add-transaction")
+i=A.dx("https://investortrack-backend.onrender.com/api/add-transaction")
 h=t.N
 g=A.am(["Content-Type","application/json; charset=UTF-8","Authorization","Bearer "+A.n(n)],h,h)
 s=9
@@ -85675,7 +85675,7 @@ case 8:m=b
 if(m==null){i=A.bt("user ID not found")
 throw A.e(i)}i=t.N
 s=9
-return A.M(A.Hh(A.dx("https://investortrack.onrender.com/api/summary/"+m),A.am(["Content-Type","application/json ; charset = UTF-8","Authorization","Bearer "+A.n(n)],i,i)),$async$of)
+return A.M(A.Hh(A.dx("https://investortrack-backend.onrender.com/api/summary/"+m),A.am(["Content-Type","application/json ; charset = UTF-8","Authorization","Bearer "+A.n(n)],i,i)),$async$of)
 case 9:l=b
 if(l.b===200){i=l
 i=B.ab.fR(0,A.h6(A.h4(i.e)).cG(0,i.w),null)
@@ -85712,7 +85712,7 @@ case 8:m=b
 if(m==null){j=A.bt("user ID not found.")
 throw A.e(j)}j=t.N
 s=9
-return A.M(A.Hh(A.dx("https://investortrack.onrender.com/api/budgets/"+m),A.am(["Authorization","Bearer "+A.n(n)],j,j)),$async$o7)
+return A.M(A.Hh(A.dx("https://investortrack-backend.onrender.com/api/budgets/"+m),A.am(["Authorization","Bearer "+A.n(n)],j,j)),$async$o7)
 case 9:l=b
 if(l.b===200){j=l
 j=B.ab.fR(0,A.h6(A.h4(j.e)).cG(0,j.w),null)
@@ -85744,7 +85744,7 @@ case 7:n=e
 s=8
 return A.M(B.ar.eW(0,"userId"),$async$pj)
 case 8:m=e
-j=A.dx("https://investortrack.onrender.com/api/budgets")
+j=A.dx("https://investortrack-backend.onrender.com/api/budgets")
 i=t.N
 h=A.am(["Content-Type","application/json; charset=UTF-8","Authorization","Bearer "+A.n(n)],i,i)
 s=9
@@ -85782,7 +85782,7 @@ case 8:m=b
 if(m==null){j=A.bt("User ID not found.")
 throw A.e(j)}j=t.N
 s=9
-return A.M(A.Hh(A.dx("https://investortrack.onrender.com/api/goals/"+m),A.am(["Authorization","Bearer "+A.n(n)],j,j)),$async$oa)
+return A.M(A.Hh(A.dx("https://investortrack-backend.onrender.com/api/goals/"+m),A.am(["Authorization","Bearer "+A.n(n)],j,j)),$async$oa)
 case 9:l=b
 if(l.b===200){j=l
 j=B.ab.fR(0,A.h6(A.h4(j.e)).cG(0,j.w),null)
@@ -85814,7 +85814,7 @@ case 7:n=e
 s=8
 return A.M(B.ar.eW(0,"userId"),$async$pk)
 case 8:m=e
-j=A.dx("https://investortrack.onrender.com/api/goals")
+j=A.dx("https://investortrack-backend.onrender.com/api/goals")
 i=t.N
 h=A.am(["Content-Type","application/json; chatset=UTF-8","Authorization","Bearer "+A.n(n)],i,i)
 s=9
@@ -85854,7 +85854,7 @@ case 8:m=b
 if(m==null){k=A.bt("User ID not found.")
 throw A.e(k)}k=t.N
 s=9
-return A.M(A.Hh(A.dx("https://investortrack.onrender.com/api/stats/"+m),A.am(["Authorization","Bearer "+A.n(n)],k,k)),$async$o8)
+return A.M(A.Hh(A.dx("https://investortrack-backend.onrender.com/api/stats/"+m),A.am(["Authorization","Bearer "+A.n(n)],k,k)),$async$o8)
 case 9:l=b
 if(l.b===200){k=l
 k=B.ab.fR(0,A.h6(A.h4(k.e)).cG(0,k.w),null)
@@ -85887,7 +85887,7 @@ case 8:m=b
 if(m==null){j=A.bt("User ID not found.")
 throw A.e(j)}j=t.N
 s=9
-return A.M(A.Hh(A.dx("https://investortrack.onrender.com/api/investments/performance/"+m),A.am(["Authorization","Bearer "+A.n(n)],j,j)),$async$ob)
+return A.M(A.Hh(A.dx("https://investortrack-backend.onrender.com/api/investments/performance/"+m),A.am(["Authorization","Bearer "+A.n(n)],j,j)),$async$ob)
 case 9:l=b
 if(l.b===200){j=l
 j=B.ab.fR(0,A.h6(A.h4(j.e)).cG(0,j.w),null)
