@@ -63,10 +63,10 @@ class ApiService   {
   Future<List<dynamic>> getTransactions() async{
     try{
       final token = await _storage.read(key: 'token');
-
       final userId = await _storage.read(key: 'userId');
-      if (userId == null) {
-        throw Exception('User ID not found.'); }
+
+      if (token == null) throw Exception('User not logged in. Token not found.');
+      if (userId == null) throw Exception('User ID not found.'); 
 
       final response =await http.get(
         Uri.parse('$_baseUrl/api/transactions/$userId'),
@@ -93,6 +93,8 @@ class ApiService   {
       try{
         final token = await _storage.read(key: 'token');
         final userId = await _storage.read(key: 'userId');
+
+        if (token == null) throw Exception('User not logged in. Token not found.');
 
         final response = await http.post(
           Uri.parse('$_baseUrl/api/add-transaction'),
@@ -127,13 +129,13 @@ class ApiService   {
       try{
         final token = await _storage.read(key:'token');
         final userId = await _storage.read(key:'userId');
-        
-        if(userId== null){
-          throw Exception('user ID not found');
-        }
+
+        if (token == null) throw Exception('User not logged in. Token not found.');
+        if(userId== null) throw Exception('user ID not found');
+
         final response = await http.get(Uri.parse('$_baseUrl/api/summary/$userId'),
         headers: {
-          'Content-Type': 'application/json ; charset = UTF-8',
+          'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token',
         },
         );
@@ -155,6 +157,8 @@ Future<List<dynamic>> getBudgets() async{
   try{
     final token = await _storage.read(key: 'token');
     final userId = await _storage.read(key:'userId');
+
+    if (token == null) throw Exception('User not logged in. Token not found.');
     if(userId== null) throw Exception('user ID not found.');
 
     final response = await http.get(
@@ -177,6 +181,8 @@ Future<Map<String,dynamic>> addBudget(String category, double amount, String mon
   try{
     final token = await _storage.read(key: 'token');
     final userId = await _storage.read(key:'userId');
+
+    if (token == null) throw Exception('User not logged in. Token not found.');
 
     final response = await http.post(
       Uri.parse('$_baseUrl/api/budgets'),
@@ -209,6 +215,8 @@ Future<List<dynamic>> getGoals()  async{
   try{
     final token = await _storage.read(key:'token');
     final userId = await _storage.read(key:'userId');
+
+    if (token == null) throw Exception('User not logged in. Token not found.');
     if(userId == null) throw Exception('User ID not found.');
 
     final response = await http.get(
@@ -233,10 +241,13 @@ Future<Map<String,dynamic>> addGoal(String title, double targetAmount, String ta
     final token = await _storage.read(key:'token');
     final userId = await _storage.read(key:'userId');
 
+    if (token == null) throw Exception('User not logged in. Token not found.');
+
+
     final response = await http.post(
       Uri.parse('$_baseUrl/api/goals'),
       headers: {
-        'Content-Type': 'application/json; chatset=UTF-8',
+        'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String,dynamic>{
@@ -265,6 +276,8 @@ Future<Map<String,dynamic>> getDashboardStats() async{
   try{
     final token = await _storage.read(key:'token');
     final userId = await _storage.read(key:'userId');
+
+    if (token == null) throw Exception('User not logged in. Token not found.');
     if(userId == null) throw Exception('User ID not found.');
 
     final response = await http.get(Uri.parse('$_baseUrl/api/stats/$userId'),
@@ -288,6 +301,7 @@ Future<List<dynamic>> getInvestmentPerformance() async{
   try{
     final token= await _storage.read(key: 'token');
     final userId = await _storage.read(key: 'userId');
+    if (token == null) throw Exception('User not logged in. Token not found.');
     if(userId == null) throw Exception('User ID not found.');
 
     final response = await http.get(Uri.parse('$_baseUrl/api/investments/performance/$userId'),
