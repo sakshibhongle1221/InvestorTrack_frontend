@@ -65,8 +65,12 @@ class _LoginScreenState extends State<LoginScreen>{
                   final String token = responseData['token'];
                   final String userId = responseData['userId'].toString(); 
 
-                  await _storage.write(key:'token',value:token);
+                  await _storage.write(key: 'token', value: token);
                   await _storage.write(key: 'userId', value: userId);
+
+                  final testToken = await _storage.read(key: 'token');
+                  final testId = await _storage.read(key: 'userId');
+                  print("Saved token: $testToken, Saved userId: $testId");
 
 
                   if(mounted){

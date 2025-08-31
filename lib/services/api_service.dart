@@ -36,14 +36,16 @@ class ApiService   {
       final response = await http.post(
         Uri.parse('$_baseUrl/login'),
         headers:<String,String>{
-          'Content-Type':'application/json;charset=UTF-8',
+          'Content-Type':'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String,String>{
           'email':email,
           'password':password,
         }),
       );
-      final data = jsonDecode(response.body);
+      
+      //final data = jsonDecode(response.body);
+      final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
       if(response.statusCode == 200){
         return {
         'token': data['token'],
@@ -79,7 +81,9 @@ class ApiService   {
         return jsonDecode(response.body);
       }
       else{
-        final data = jsonDecode(response.body);
+        //final data = jsonDecode(response.body);
+        final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
+
         throw Exception(data['message']?? 'Failed To Load Transactions.');
       }
     }
@@ -115,7 +119,7 @@ class ApiService   {
           return jsonDecode(response.body);
         }
         else{
-          final data = jsonDecode(response.body);
+          final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
           throw Exception(data['message']??'Failed to add transaction.');
         }
       }
@@ -143,7 +147,9 @@ class ApiService   {
           return jsonDecode(response.body);
         }
         else{
-          final data = jsonDecode(response.body);
+          //final data = jsonDecode(response.body);
+          final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
+
       throw Exception(data['message'] ?? 'Failed to load summary.');
         }
       }
@@ -319,8 +325,6 @@ Future<List<dynamic>> getInvestmentPerformance() async{
     throw Exception('API call failed: $e');
   }
 }
-
-
 
 
 }
